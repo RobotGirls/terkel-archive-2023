@@ -121,7 +121,7 @@ public class SingleShotColorSensorTask extends RobotTask
 
     public void setReflectColor(boolean on, HardwareMap hardwareMap)
     {
-        this.relativeLayout = ((Activity) hardwareMap.appContext).findViewById(R.id.RelativeLayout);
+//        this.relativeLayout = ((Activity) hardwareMap.appContext).findViewById(R.id.RelativeLayout);
         this.reflectColor = on;
     }
 
