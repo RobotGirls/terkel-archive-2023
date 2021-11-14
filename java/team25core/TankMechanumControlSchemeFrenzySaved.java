@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
  */
 
 
-public class TankMechanumControlSchemeFrenzy implements JoystickDriveControlScheme {
+public class TankMechanumControlSchemeFrenzySaved implements JoystickDriveControlScheme {
 
     /*
      * An Andymark 40 native spin direction is counterclockwise.
@@ -38,13 +38,13 @@ public class TankMechanumControlSchemeFrenzy implements JoystickDriveControlSche
     protected Gamepad gamepad;
     protected MotorDirection motorDirection;
 
-    public TankMechanumControlSchemeFrenzy(Gamepad gamepad)
+    public TankMechanumControlSchemeFrenzySaved(Gamepad gamepad)
     {
         this.gamepad = gamepad;
         this.motorDirection = MotorDirection.CANONICAL;
     }
 
-    public TankMechanumControlSchemeFrenzy(Gamepad gamepad, MotorDirection motorDirection)
+    public TankMechanumControlSchemeFrenzySaved(Gamepad gamepad, MotorDirection motorDirection)
     {
         this.gamepad = gamepad;
         this.motorDirection = motorDirection;
@@ -52,29 +52,29 @@ public class TankMechanumControlSchemeFrenzy implements JoystickDriveControlSche
 
     public MotorValues getMotorPowers()
     {
-        leftX = -gamepad.left_stick_x;
-        rightX = -gamepad.right_stick_x;
-        leftY = -gamepad.left_stick_y;
-        rightY = -gamepad.right_stick_y;
+        leftX = gamepad.left_stick_x;
+        rightX = gamepad.right_stick_x;
+        leftY = gamepad.left_stick_y;
+        rightY = gamepad.right_stick_y;
 
         // If joysticks are pointed left (negative joystick values), counter rotate wheels.
         // Threshold for joystick values in the x may vary.
 
         if (Math.abs(leftX) > 0.5 && Math.abs(rightX) > 0.5) {          // sideways right
-            fl = -leftX;
-            rl = leftX;
-            fr = rightX;
-            rr = -rightX;
-//        } else if ((leftY < 0.5) && (rightY > 0.5)){   //turn right
-//            fl = - leftY;
-//            rl = - leftY;
-//            fr = - rightY;
-//            rr = - rightY;
-//        } else if ((leftY > 0.5) && (rightY < 0.5)) {   // turn left
-//            fl =  - leftY;
-//            rl =  - leftY;
-//            fr =  - rightY;
-//            rr =  - rightY;
+            fl = leftX;
+            rl = -leftX;
+            fr = -rightX;
+            rr = rightX;
+        } else if (leftY < 0.5 && rightY > 0.5) {   //turn right
+            fl = - leftY;
+            rl = - leftY;
+            fr = - rightY;
+            rr = - rightY;
+        } else if (leftY > 0.5 && rightY < 0.5) {   // turn left
+            fl =  - leftY;
+            rl =  - leftY;
+            fr =  - rightY;
+            rr =  - rightY;
         } else if (gamepad.right_trigger > 0.5) {   // backward diagonal to the right
             fr = -1.0;
             rl = 1.0;
@@ -88,10 +88,10 @@ public class TankMechanumControlSchemeFrenzy implements JoystickDriveControlSche
             rr = 1.0;
             fl = -1.0;
         } else {                                    // forward or backward
-            fl = leftY;
-            rl = leftY;
-            fr = rightY;
-            rr = rightY;
+            fl = -leftY;
+            rl = -leftY;
+            fr = -rightY;
+            rr = -rightY;
         }
 
         return new MotorValues(fl, fr, rl, rr);
