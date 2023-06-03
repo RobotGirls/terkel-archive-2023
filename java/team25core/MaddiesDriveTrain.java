@@ -3,7 +3,7 @@ package team25core;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-public class MaddiesDriveTrain extends DrivetrainBaseImpl  {
+public class MaddiesDriveTrain extends DrivetrainBaseImpl implements Drivetrain  {
 
     private DcMotor frontLeft;
     private DcMotor frontRight;
@@ -23,6 +23,7 @@ public class MaddiesDriveTrain extends DrivetrainBaseImpl  {
          * travelled when following a dead reckon path.
          */
         setMasterMotor(backRight);
+        //chooses the motor enconder
     }
 
     public void setCanonicalMotorDirection() {
@@ -35,6 +36,7 @@ public class MaddiesDriveTrain extends DrivetrainBaseImpl  {
     }
 
     //sets motors position to 0
+    @Override
     public void resetEncoders(){
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -59,7 +61,9 @@ public class MaddiesDriveTrain extends DrivetrainBaseImpl  {
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
     }
-   public void straight(double speed) {
+
+    @Override
+    public void straight(double speed) {
 
         frontRight.setPower(speed);
         backRight.setPower(speed);
@@ -68,10 +72,75 @@ public class MaddiesDriveTrain extends DrivetrainBaseImpl  {
    }
 
 
-
+    /**
+     * Postitive is to the right, negative is to the left
+     */
+    @Override
     public void strafe(double speed) {
         double adjSpeed;
     }
+
+
+
+    /**
+     * Move forward or back on a diagonal at 315 (forward) / 135 (backward) degrees
+     *
+     * Obviously only works for mechanum drivetrains
+     */
+    @Override
+    public void leftDiagonal(double speed) {
+        frontRight.setPower(-speed);
+
+        backLeft.setPower(-speed);
+    }
+    /**
+     * Move forward or back on a diagonal at 45 (forward) / 225 (backward) degrees
+     *
+     * Obviously only works for mechanum drivetrains
+     */
+    @Override
+    public void rightDiagonal(double speed){
+
+        backRight.setPower(-speed);
+        frontLeft.setPower(-speed);
+
+    }
+    /**
+     * Allows a turn around a pivot point that is not the dead center of the drivetrain.
+     */
+    @Override
+    public void turn(double speed) {
+        frontRight.setPower(speed);
+        backRight.setPower(speed);
+        frontLeft.setPower(speed);
+        backLeft.setPower(speed);
+    }
+   public void pivotTurn(Drivetrain.PivotSide side, double speed){
+
+    }
+   public void setPivotMultiplier(double pivotMultiplier){
+
+    }
+
+    public void setPowerLeft(double speed){
+
+    }
+    public void setPowerRight(double speed){
+
+    }
+    public void stop(){
+
+    }
+    public void move(double axial, double lateral, double yaw){
+
+    }
+    @Override
+   public void logEncoderCounts(){
+
+    }
 }
+
+
+
 
 
