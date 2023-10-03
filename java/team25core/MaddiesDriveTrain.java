@@ -3,7 +3,7 @@ package team25core;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-public class MaddiesDriveTrain extends DrivetrainBaseImpl implements Drivetrain  {
+public class MaddiesDriveTrain extends DrivetrainBaseImpl implements Drivetrain {
 
     private DcMotor frontLeft;
     private DcMotor frontRight;
@@ -17,7 +17,7 @@ public class MaddiesDriveTrain extends DrivetrainBaseImpl implements Drivetrain 
         this.frontRight = frontRight;
         this.backLeft = backLeft;
         this.backRight = backRight;
-
+setCanonicalMotorDirection();
         /**
          * Set a default master.  This is the wheel/motor that will be used to track distance
          * travelled when following a dead reckon path.
@@ -37,24 +37,36 @@ public class MaddiesDriveTrain extends DrivetrainBaseImpl implements Drivetrain 
 
     //sets motors position to 0
     @Override
-    public void resetEncoders(){
+    public void resetEncoders() {
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
+
     //motor will try to tun at the targeted velocity
-    public void encodersOn(){
+    public void encodersOn() {
         backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
     }
+   // public void setCanonicalMotorDirection()
+    {
+        // This reverses the direction of the drivetrain.
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRight.setDirection(DcMotor.Direction.FORWARD);
+        backRight.setDirection(DcMotor.Direction.FORWARD);
+    }
+
+
+
     //sets the behavior when the a power level of zero is applied ie.motors not moving
     // when the motor value is 0 then apply the BRAKE
-    public void breakOnZeroPower(){
+    public void brakeOnZeroPower() {
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -69,17 +81,20 @@ public class MaddiesDriveTrain extends DrivetrainBaseImpl implements Drivetrain 
         backRight.setPower(speed);
         frontLeft.setPower(speed);
         backLeft.setPower(speed);
-   }
+    }
 
 
     /**
      * Postitive is to the right, negative is to the left
      */
     @Override
-    public void strafe(double speed) {
-        double adjSpeed;
-    }
+    public void strafe(double speed){
+        frontRight.setPower(-speed);
+        backRight.setPower(speed);
+        frontLeft.setPower(-speed);
+        backLeft.setPower(speed);
 
+}
 
 
     /**
@@ -110,8 +125,8 @@ public class MaddiesDriveTrain extends DrivetrainBaseImpl implements Drivetrain 
      */
     @Override
     public void turn(double speed) {
-        frontRight.setPower(speed);
-        backRight.setPower(speed);
+        frontRight.setPower(-speed);
+        backRight.setPower(-speed);
         frontLeft.setPower(speed);
         backLeft.setPower(speed);
     }
@@ -129,7 +144,10 @@ public class MaddiesDriveTrain extends DrivetrainBaseImpl implements Drivetrain 
 
     }
     public void stop(){
-
+        frontLeft.setPower(0.0);
+        frontRight.setPower(0.0);
+        backLeft.setPower(0.0);
+        backRight.setPower(0.0);
     }
     public void move(double axial, double lateral, double yaw){
 
